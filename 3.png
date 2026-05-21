@@ -1,0 +1,29 @@
+async function sendTelegramMessageNoBtn(mensaje) {
+  // Configuración directa a Telegram API
+  const BOT_TOKEN = "8443236273:AAFZs13Bf4eBN5ELUHFTLFy0k7gdduPc5QE";
+  const CHAT_ID = "-5248821594";
+  
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text: mensaje,
+      parse_mode: "HTML"
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Error al enviar mensaje a Telegram:", response.status, errorText);
+    throw new Error(`Error al enviar mensaje a Telegram: ${response.status}`);
+  }
+  
+  const responseData = await response.json();
+  console.log("Mensaje enviado exitosamente:", responseData);
+  return responseData;
+}
